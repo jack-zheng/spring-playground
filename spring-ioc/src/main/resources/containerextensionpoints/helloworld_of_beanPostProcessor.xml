@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/lang
+        https://www.springframework.org/schema/lang/spring-lang.xsd">
+
+<!--    <lang:groovy id="messenger"-->
+<!--                 script-source="classpath:org/springframework/scripting/groovy/Messenger.groovy">-->
+<!--        <lang:property name="message" value="Fiona Apple Is Just So Dreamy."/>-->
+<!--    </lang:groovy>-->
+
+    <bean id="t18" class="bean.t18.T18Bean">
+        <property name="name" value="t18"/>
+    </bean>
+
+    <bean id="t1802" class="bean.t18.T18Bean">
+        <property name="name" value="t1802"/>
+    </bean>
+
+    <!--
+    when the above bean (messenger) is instantiated, this custom
+    BeanPostProcessor implementation will output the fact to the system console
+    -->
+    <bean class="bean.t18.InstantiationTracingBeanPostProcessor"/>
+
+</beans>

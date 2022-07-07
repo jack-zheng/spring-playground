@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="auto01" class="bean.t19.Auto01"/>
+    <bean id="auto02" class="bean.t19.Auto02">
+        <property name="name" value="a02"/>
+    </bean>
+    <bean id="auto031" class="bean.t19.Auto03">
+        <property name="name" value="a03"/>
+    </bean>
+
+<!--    <bean id="auto032" class="bean.t19.Auto03">-->
+<!--        <property name="name" value="a03_2"/>-->
+<!--    </bean>-->
+    <bean id="auto04" class="bean.t19.Auto04">
+        <property name="name" value="a04"/>
+    </bean>
+
+    <bean id="qualifiersBean" class="bean.t19.QualifiersBean">
+        <property name="name" value="q01"/>
+    </bean>
+    <bean id="qual01_1" class="bean.t19.QualifiersBean">
+        <qualifier value="qual01"/>
+        <property name="name" value="qual01"/>
+    </bean>
+
+    <context:annotation-config/>
+</beans>

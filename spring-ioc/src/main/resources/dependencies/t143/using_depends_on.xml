@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--    当没有 depends-on 属性时，classA 中 propA 的值和配置文件中语句的顺序有关-->
+    <!--    <bean id="classA" class="bean.ClassA"/>-->
+    <bean id="classB" class="bean.ClassB"/>
+    <!--    当有 depends-on 属性时，classA 中 propA 的值和配置文件中语句的顺序无关-->
+    <bean id="classA" class="bean.ClassA" depends-on="classB"/>
+</beans>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="address" class="bean.Address">
+        <property name="address" value="shanghai"/>
+    </bean>
+
+    <bean id="student" class="bean.Student">
+        <property name="name" value="Jack"/>
+        <property name="age" value="32"/>
+        <property name="alias">
+            <list>
+                <value>jzheng</value>
+                <value>jb</value>
+            </list>
+        </property>
+
+        <property name="address" ref="address"/>
+
+        <property name="phone">
+            <bean class="bean.Student.Phone">
+                <property name="brand" value="xiaomi"/>
+                <property name="price" value="100.0"/>
+            </bean>
+        </property>
+
+        <property name="hardware">
+            <list>
+                <value>h1</value>
+                <value>h2</value>
+            </list>
+        </property>
+
+        <property name="sports">
+            <set>
+                <value>sing</value>
+                <value>dance</value>
+                <value>rap</value>
+            </set>
+        </property>
+
+        <property name="cards">
+            <map>
+                <entry key="card1" value="123"/>
+                <entry key="card2" value="456"/>
+            </map>
+        </property>
+
+        <property name="infos">
+            <props>
+                <prop key="wight">100</prop>
+                <prop key="high">100</prop>
+            </props>
+        </property>
+
+        <property name="gender" value=""/>
+        <property name="friends">
+            <null/>
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="cat" class="bean.t145.Cat">
+        <property name="name" value="mimi"/>
+    </bean>
+
+    <bean id="cat2" class="bean.t145.Cat">
+        <property name="name" value="miao"/>
+    </bean>
+
+<!--    当有多个类型匹配时，byType 会抛错-->
+<!--    <bean id="people1" class="bean.t145.People" autowire="byType">-->
+<!--        <property name="name" value="p1"/>-->
+<!--    </bean>-->
+    <bean id="people2" class="bean.t145.People" autowire="byName">
+        <property name="name" value="p2"/>
+    </bean>
+
+    <bean id="people3" class="bean.t145.People">
+        <property name="name" value="p2"/>
+    </bean>
+</beans>
