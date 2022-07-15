@@ -471,6 +471,8 @@ ResourceLoader 的扩展接口，指定 pattern 返回符合标准的接口
 
 ### 5.1 AOP Concepts
 
+JDK 自带的 dynamic proxy 实现，底层主要用到两个类，都在 reflection 包下，一个是 Proxy, 一个是 InvocationHandler。前者实例化 proxy 对象的时候需要后者。后者可以定制方法调用时的逻辑。
+
 * Aspect 实现切面逻辑的类，带有 @Aspect 注解的那些
 * Join point: 需要处理的目标方法
 * Advice: 处理方式，包裹 around, before, after
