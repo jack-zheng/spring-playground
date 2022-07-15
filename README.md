@@ -41,6 +41,15 @@
    * 通过实例的方法
 6. 想要确定 bean 的运行时类型，建议调用 BeanFactory.getType 方法
 
+> 通过静态工厂方法 vs 通过实例的方法
+> 这两者区别这是表现形式不一样，效果都是一样的，生成了想要的 bean. 
+> 静态工厂 <bean id="t13static" class="bean.t13.StaticFactoryMethod" factory-method="getT13Bean"/>
+> class 为工厂方法所在的类，指定工厂方法，返回的结果则是目标类型的 bean
+> 实例方法 
+>  <bean id="t13instance" factory-bean="instanceFactoryMethod" factory-method="getT13Bean"/>
+>  <bean id="instanceFactoryMethod" class="bean.t13.InstanceFactoryMethod" />
+> 先用 bean 标签生成工厂 bean 然后通过 factory-bean 指定这个工厂 bean, 再指定工厂方法即可
+
 ### 1.4 Dependencies
 
 当 bean 构建时，容器帮他管理依赖，而不是 bean 自己通过构造或者 Service Locator pattern 管理，这就是控制反转。
@@ -104,7 +113,18 @@ autowire 有四种类型，分别是 no, byName, byType, constructor
 
 可以通过 autowire-candidate 属性阻止自动匹配，但是优先级比 byName 低
 
-**1.4.6** 介绍了和容器交互和替换类方法的一些方式，后者感觉和 AOP 有点重复。教学视频没提，之后多搜集自来哦看看
+**1.4.6** Method Injection
+
+设想一种场景，你有两个容器管理的 bean, 分别是 A，B 然后 B 是 A 的一个 autowire 的属性，并且是 prototype 的。这是如果你连续调用 A 打印 B 会发现 B 是不变的，并不符合 prototype 的定义
+原因是因为 A 是托管给容器的，他只初始化一次，完成够 A-B 之间的关系就确定了，B 并不会刷新。
+
+解决办法有三种 
+
+* ApplicationContextAware 接口，并不是很推荐，因为会和 spring 代码产生依赖
+* method injection，底层使用 CGLIB 产生子类，重写方法
+* replaced-method, 这种功能上和 AOP 重叠的，而且替换效率低，更推荐 AOP 实现
+
+看了文档，感觉前面两个的主要意图还是解决 bean 的依赖关系，在方法执行后，返回我么想要的 prototype bean, 也就是 return type 是某个 bean 的方法。如果你只是想改变逻辑还得用 AOP。
 
 ### 1.5 Bean Scopes
 
@@ -407,3 +427,192 @@ PS: Bizx 里面 AOP 不能识别 @Controller 里面的内容可能就是应为�
 ** 1.16.1.** BeanFactory or ApplicationContext
 
 两者对比，并指出优缺点
+
+## Resources
+
+JDK 提供的 URL 类来处理资源相关问题，但是兼容性并不好，很多情况不能兼容，spring 提供了 Resource 接口来解决这个问题
+
+### 2.2 The Resource Interface
+
+package is meant to be a more capable interface for abstracting access to low-level resources.
+
+### 2.3. Built-in Resource Implementations
+
+* UrlResource
+* ClassPathResource, 以 `classpath:` 开头
+* FileSystemResource
+* PathResource, 相比前者更高效
+* ServletContextResource
+* InputStreamResource
+* ByteArrayResource
+  
+### 2.4. The ResourceLoader Interface
+
+用来返回 Resource 的接口， ClassPathXmlApplicationContext 调用 getResource 返回 ClassPathResource，FileSystemXmlApplicationContext 返回 FileSystemResource，
+WebApplicationContext 返回 ServletContextResource。你也可以指定前缀来指定返回类型 比如 classpath:, file://, https://.
+
+### 2.5. The ResourcePatternResolver Interface
+
+ResourceLoader 的扩展接口，指定 pattern 返回符合标准的接口
+
+### 2.6. The ResourceLoaderAware Interface
+
+一个回掉接口知道一个 component 期望接收一个 ResourceLoader 引用。容器在处理带有这种接口的 bean 时会将在初始化的时候将 ResourceLoader 注入到这个 bean 中。
+
+当然你也可以用 @Autowire 或者在 bean 的构造函数中指定 ResourceLoader 或者用 setter 方法来达到同样的效果。
+
+列出了一写 xml 中配置 resource 的 sample。
+
+### 2.8. Application Contexts and Resource Paths
+
+一些匹配方式的应用，没什么新意
+
+## Aspect Oriented Programming with Spring
+
+### 5.1 AOP Concepts
+
+* Aspect 实现切面逻辑的类，带有 @Aspect 注解的那些
+* Join point: 需要处理的目标方法
+* Advice: 处理方式，包裹 around, before, after
+* Pointcut: 目标方法的匹配规则
+* Introduction: ?
+* Target object: 切面的作用对象
+* AOP proxy: 框架创建的实现切面的对象
+* Weaving: 将切面和其他对象关联起来
+
+Advice 类型：
+
+* before
+* after
+* after throwing
+* after (finally) advice
+* around advice
+
+### 5.2. Spring AOP Capabilities and Goals
+
+* Spring AOP 为纯 Java 实现
+* 目前只支持对方法做 advice，field 不支持
+* 并没有提供 AOP 的全面支持，只实现 IoC 相关的部分
+
+### 5.3. AOP Proxies
+
+Spring AOP 默认使用 JDK 动态代理 + interface 实现 AOP 支持。同时也支持 CGLIB 代理。
+
+### 5.4. @AspectJ support
+
+这里指的是 AspectJ 项目引入的一些 annotation。
+
+通过 @EnableAspectJAutoProxy 或者 <aop:aspectj-autoproxy/> enable AOP 功能
+
+PS: 可以通过 xml, @Bean + @Configuration 或者 classpath scan 的方式注册 aspect bean。如果通过扫描的方式注册，那么 Aspect 类还需要添加 @Component 注解
+
+**5.4.3.** Declaring a Pointcut
+
+匹配规则由两部分组成： 普通 void 方法 + @Pointcut 表达式
+
+```java
+@Pointcut("execution(* transfer(..))") // the pointcut expression
+private void anyOldTransfer() {} // the pointcut signature
+```
+
+Spring AOP 支持如下标签
+
+* execution，匹配方法
+* within，匹配包路径
+* this，proxy 实现了某接口
+* target，target object implements
+* args，匹配方法参数
+* @target，目标 object 由 xx 注解
+* @args，参数带有 xx 注解
+* @within，the target object has an xx annotation
+* @annotation, the executing method has an @xx annotation
+* bean, 容器中 xx bean 的所有方法，支持模糊匹配
+
+PS: 难怪我的那个 perf 注解加了之后老是启动失败，注解加错了，如果是方法带注解，要使用 @annotation
+
+pointcut 支持组合
+
+pointcut 格式： execution(modifiers-pattern? ret-type-pattern declaring-type-pattern?name-pattern(param-pattern)
+throws-pattern?)
+
+关于匹配性能，匹配分三种类型
+
+* Kinded designators select a particular kind of join point: execution, get, set, call, and handler.
+* Scoping designators select a group of join points of interest (probably of many kinds): within and withincode
+* Contextual designators match (and optionally bind) based on context: this, target, and @annotation
+
+scoping 类型是最快的，所以尽量用 scoping + 其余 的方式组织你的匹配规则
+
+项目中为了测试 AOP 需要加入新的 dependency
+
+```xml
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
+<dependency>
+   <groupId>org.springframework</groupId>
+   <artifactId>spring-aspects</artifactId>
+   <version>5.3.21</version>
+</dependency>
+```
+
+**5.4.4. Declaring Advice**
+
+Advice 注解中的内容可以是 pointcut 表达式，也可以是 匹配规则
+
+@After 中你必须提供处理正常和异常情况的解决方案。
+
+**5.4.7.** An AOP Example
+
+举了一个 retry 的例子，可以魔改一下试试
+
+### 5.5. Schema-based AOP Support
+
+xml 中定义 Aspect 相关的类时，pointcut 和 aspect 标签可以是平级，也可以是从属关系。写了一些 xml 配置 aop 的例子，挺好理解的，倒是官方文档的说明太松散了，学起来效率太低。
+
+### 5.6. Choosing which AOP Declaration Style to Use
+
+* 没必要采用 Full AspectJ
+* xml + AOP 共能支持不全，而且会导致配置分散
+* @AspectJ 更推荐
+  
+On balance, the Spring team prefers the @AspectJ style for custom aspects beyond simple configuration of enterprise services.
+
+## 5.8. Proxying Mechanisms
+
+Spring AOP 实现分两种：JDK dynamic proxies + CGLIB, 前者只适用于实现有接口，后者则是 public，protected 的方法都能适用。
+
+可以通过 `<aop:config proxy-target-class="true">` 强制走 CGLIB 路线。
+
+PS: aspectj-autoproxy 什么意思？
+
+说实话，他说的那个机制部分没怎么看懂
+
+## 5.9. Programmatic Creation of @AspectJ Proxies
+
+暂时不重要，pass
+
+## 5.10. Using AspectJ with Spring Applications
+
+被 `<aop:aspectj-autoproxy/>` 这个标签误导了好久，其实就集中情况。默认情况下 Spring 是不支持 @Aspect 等 AspectJ 标签的，而且 spring 中不用这些标签就能实现 AOP 功能。
+
+纯 Spring 配置 AOP, 只需要定义普通的 Java 类，不需要加任何注解。然后在 xml 中加入 aop 检验的 xsd 并配置切面关系即可。参考 aop.xml 相关的 UT
+
+不过官方文档也说了，spring + aspectj 注解是最佳实践，如果你想在 Java 类中使用注解，但是通过 xml 配置 + ClassPathXmlApplicationContext 启动，
+则需要在 xml 中引入 aop.xsd 和 context.xsd 并且添加对应的扫描配置和代理配置
+
+* <aop:aspectj-autoproxy/>
+* <context:annotation-config/>
+* <context:component-scan base-package="t5.service"/>
+
+如果是纯 Java 实现，其实就是新建一个 config 类，并把上面的 xml 配置通过注解转化一下
+
+* @Configuration
+* @EnableAspectJAutoProxy
+* @ComponentScan
+
+后面是一些非 runtime 的 AOP 实现，用的 load time weaver 做例子, 是类加载期间的织入, 暂时用不到就不看了
+
+## 6. Spring AOP APIs
+
+For common applications, we recommend the use of Spring AOP with AspectJ pointcuts as described in the previous chapter.
+
+开篇明义，说是推荐使用 spring + aspectj 配合模式。后面介绍了很多概念性的东西，貌似没什么好看的

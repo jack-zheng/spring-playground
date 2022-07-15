@@ -4,23 +4,23 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="cat" class="bean.t145.Cat">
+    <bean id="cat" class="bean.t14.Cat">
         <property name="name" value="mimi"/>
     </bean>
 
-    <bean id="cat2" class="bean.t145.Cat">
+    <bean id="cat2" class="bean.t14.Cat">
         <property name="name" value="miao"/>
     </bean>
 
 <!--    当有多个类型匹配时，byType 会抛错-->
-<!--    <bean id="people1" class="bean.t145.People" autowire="byType">-->
+<!--    <bean id="people1" class="bean.t14.People" autowire="byType">-->
 <!--        <property name="name" value="p1"/>-->
 <!--    </bean>-->
-    <bean id="people2" class="bean.t145.People" autowire="byName">
+    <bean id="people2" class="bean.t14.People" autowire="byName">
         <property name="name" value="p2"/>
     </bean>
 
-    <bean id="people3" class="bean.t145.People">
+    <bean id="people3" class="bean.t14.People">
         <property name="name" value="p2"/>
     </bean>
 </beans>

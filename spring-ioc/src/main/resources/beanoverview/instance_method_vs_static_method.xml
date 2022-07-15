@@ -4,11 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="cat" class="bean.t14.Cat">
-        <property name="name" value="mimi"/>
-    </bean>
-
-    <bean id="people" class="bean.t14.People" autowire-candidate="false" autowire="byName">
-        <property name="name" value="p2"/>
-    </bean>
+    <bean id="t13static" class="bean.t13.StaticFactoryMethod" factory-method="getT13Bean"/>
+    <bean id="t13instance" factory-bean="instanceFactoryMethod" factory-method="getT13Bean"/>
+    <bean id="instanceFactoryMethod" class="bean.t13.InstanceFactoryMethod" />
 </beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--    <aop:aspectj-autoproxy/>-->
+    <bean id="date" class="t5.utils.DateUtils"/>
+    <bean id="people" class="t5.bean.People"/>
+
+    <aop:config proxy-target-class="true">
+        <aop:aspect ref="date">
+            <aop:around method="doAround" pointcut="execution(* t5.bean.People.*(..))"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

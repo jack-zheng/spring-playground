@@ -25,4 +25,11 @@ public class T132 {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("beanoverview/instantiation_by_using_an_instance_factory_method.xml");
         System.out.println(ctx.getBean("clientService"));
     }
+
+    @Test
+    public void instance_method_vs_static_method() {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("beanoverview/instance_method_vs_static_method.xml");
+        System.out.println(ctx.getBean("t13static"));
+        System.out.println(ctx.getBean("t13instance"));
+    }
 }

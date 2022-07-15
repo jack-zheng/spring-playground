@@ -4,14 +4,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="cat2" class="bean.t145.Cat">
+    <bean id="cat2" class="bean.t14.Cat">
         <property name="name" value="mi2"/>
     </bean>
-    <bean id="cat" class="bean.t145.Cat">
+    <bean id="cat" class="bean.t14.Cat">
         <property name="name" value="mi"/>
     </bean>
 
     <!--    自动检测了，如果没有构造需要的 bean 直接报错了-->
     <!--    匹配方式是通过参数名称在容器中寻找对应 id 的 bean -->
-    <bean id="cater" class="bean.t145.Cater" autowire="constructor"/>
+    <bean id="cater" class="bean.t14.Cater" autowire="constructor"/>
 </beans>

@@ -1,22 +1,16 @@
-package bean.t145;
+package bean.t14;
 
-public class People {
+public class Cat {
     private String name;
-    private Cat cat;
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setCat(Cat cat) {
-        this.cat = cat;
-    }
-
     @Override
     public String toString() {
-        return "People{" +
+        return "Cat{" +
                 "name='" + name + '\'' +
-                ", cat=" + cat +
                 '}';
     }
 }

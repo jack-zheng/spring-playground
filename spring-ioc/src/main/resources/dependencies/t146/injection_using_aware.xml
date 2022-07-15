@@ -4,11 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="cat" class="bean.t14.Cat">
-        <property name="name" value="mimi"/>
-    </bean>
-
-    <bean id="people" class="bean.t14.People" autowire-candidate="false" autowire="byName">
-        <property name="name" value="p2"/>
-    </bean>
+        <bean id="t14BeanB" class="bean.t14.T14BeanB" scope="prototype"/>
+        <bean id="t14BeanAAware" class="bean.t14.T14BeanAAware">
+            <property name="name" value="a"/>
+        </bean>
 </beans>

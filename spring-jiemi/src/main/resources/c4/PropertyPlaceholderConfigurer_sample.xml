@@ -4,11 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="cat" class="bean.t14.Cat">
-        <property name="name" value="mimi"/>
+    <bean id="admin" class="beans.Account">
+        <property name="name" value="${admin.name}"/>
+        <property name="password" value="${admin.password}"/>
     </bean>
 
-    <bean id="people" class="bean.t14.People" autowire-candidate="false" autowire="byName">
-        <property name="name" value="p2"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="c4/admin.properties"/>
     </bean>
 </beans>
