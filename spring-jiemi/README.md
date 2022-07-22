@@ -51,3 +51,15 @@ BeanWrapper 继承了 PropertyAccessor 和 PropertyEditorRegistry 等接口方�
 检查是否实现 Aware, 是的话注入依赖实例
 
 BeanPostProcessor 包含两个方法，一个是 before initialization， 另一个是 after。典型例子是 ApplicationContextAwareProcessor，通过他我们可以将 Aware 的内容 set 进去。
+
+## 第5章 Spring IoC 容器 ApplicationContext
+
+### 5.1 统一资源加载策略
+
+* 资源统一用 Resource 表示
+* ResourceLoader 表示加载的实体，一次只加载一个资源
+* ResourcePatternResolver 批量查找资源，可以是文件系统，可以是 jar 中的资源
+
+如果是自己的类中需要用到这个 resolver，可以是使用注入或者 ResourceLoaderAware。
+
+### 5.2 国际化信息支持
